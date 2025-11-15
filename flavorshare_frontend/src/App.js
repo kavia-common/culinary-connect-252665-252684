@@ -6,6 +6,17 @@ import './App.css';
 function App() {
   const [theme, setTheme] = useState('light');
 
+  // Log Supabase env presence for diagnostics without exposing secrets
+  // Only logs whether variables are set; does not print values.
+  useEffect(() => {
+    const hasUrl = !!process.env.REACT_APP_SUPABASE_URL;
+    const hasKey = !!process.env.REACT_APP_SUPABASE_KEY;
+    // eslint-disable-next-line no-console
+    console.info(
+      `[Env Check] REACT_APP_SUPABASE_URL set: ${hasUrl}; REACT_APP_SUPABASE_KEY set: ${hasKey}`
+    );
+  }, []);
+
   // Effect to apply theme to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -32,6 +43,9 @@ function App() {
         </p>
         <p>
           Current theme: <strong>{theme}</strong>
+        </p>
+        <p>
+          App running on port: <strong>{process.env.REACT_APP_PORT || '3000'}</strong>
         </p>
         <a
           className="App-link"
