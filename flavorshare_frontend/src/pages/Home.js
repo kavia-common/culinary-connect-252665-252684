@@ -31,10 +31,22 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container" style={{ paddingTop: 16 }}>
-      <main style={{ gridColumn: '1 / -1' }}>
-        {loading ? <div>Loading...</div> : <RecipeGrid recipes={recipes} />}
-      </main>
+    <div
+      className="bg-[#fafafa]"
+      style={{
+        background: '#fafafa',
+        minHeight: 'calc(100vh - 64px)',
+      }}
+    >
+      <div className="container" style={{ paddingTop: 24, paddingBottom: 40 }}>
+        <main>
+          {loading ? (
+            <div style={{ color: '#475569' }}>Loading...</div>
+          ) : (
+            <RecipeGrid recipes={recipes} />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
