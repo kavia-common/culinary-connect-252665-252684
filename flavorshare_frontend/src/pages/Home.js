@@ -71,9 +71,15 @@ export default function Home() {
       {/* Grid */}
       <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
         {loading ? (
-          <div style={{ display: 'grid', gap: 24 }} className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl">
+          // Loading skeletons: use the same responsive grid with consistent gaps
+          <div
+            style={{ display: 'grid', gap: 24 }}
+            className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl"
+            role="list"
+            aria-label="Loading recipes"
+          >
             {new Array(8).fill(0).map((_, i) => (
-              <div key={i} className="card" style={{ borderRadius: 16, overflow: 'hidden' }}>
+              <div key={i} role="listitem" className="card" style={{ borderRadius: 16, overflow: 'hidden' }}>
                 <div className="skeleton" style={{ width: '100%', height: 200 }} />
                 <div style={{ padding: 16, display: 'grid', gap: 8 }}>
                   <div className="skeleton" style={{ width: '70%', height: 16 }} />
@@ -84,7 +90,18 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl">
+          // Ensure RecipeCard is a direct child of the grid by letting RecipeGrid render items directly
+          <div
+            role="region"
+            aria-label="Recipes"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: 24, // gap-6 equivalent
+            }}
+            className="animate-fadeIn"
+          >
+            {/* RecipeGrid already maps recipes -> direct children with the appropriate structure */}
             <RecipeGrid recipes={recipes} />
           </div>
         )}
