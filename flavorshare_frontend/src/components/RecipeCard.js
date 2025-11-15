@@ -10,7 +10,7 @@ import { Button } from './ui/Button';
 export function RecipeCard({ recipe }) {
   /** Card view for a recipe. */
   const cover = recipe?.cover_url || '';
-  const authorLabel = recipe?.author?.display_name || recipe?.author?.username || recipe?.author_username || 'Unknown';
+  const authorLabel = recipe?.author?.display_name || recipe?.author?.username || 'Unknown';
   return (
     <article className="card recipe-card">
       <img src={cover} alt={recipe?.title ? `${recipe.title} cover` : 'Recipe image'} />

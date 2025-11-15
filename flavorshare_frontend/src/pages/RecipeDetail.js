@@ -35,7 +35,7 @@ export default function RecipeDetail() {
   if (!recipe) return <div className="container" style={{ paddingTop: 24 }}>Loading...</div>;
 
   const isOwner = user?.id && recipe?.author_id && user.id === recipe.author_id;
-  const authorLabel = recipe?.author?.display_name || recipe?.author?.username || recipe?.author_username || recipe?.author_id || 'Unknown';
+  const authorLabel = recipe?.author?.display_name || recipe?.author?.username || 'Unknown';
 
   return (
     <div className="container" style={{ paddingTop: 24, maxWidth: 900 }}>
