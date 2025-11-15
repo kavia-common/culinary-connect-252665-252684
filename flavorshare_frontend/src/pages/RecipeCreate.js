@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { recipesApi } from '../lib/api';
 import { uploadRecipeImage } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
+import { Select } from '../components/ui/Select';
 
 /**
  * PUBLIC_INTERFACE
@@ -19,6 +20,7 @@ export default function RecipeCreate() {
   const [cookTime, setCookTime] = React.useState('');
   const [coverFile, setCoverFile] = React.useState(null);
   const [err, setErr] = React.useState('');
+  const [mealType, setMealType] = React.useState('');
 
   // Dynamic lists for ingredients and steps
   const [ingredients, setIngredients] = React.useState([
@@ -43,6 +45,7 @@ export default function RecipeCreate() {
       const hasStep = steps.some((s) => (s || '').trim().length > 0);
       if (!hasIngredient) { setErr('Please add at least one ingredient'); return; }
       if (!hasStep) { setErr('Please add at least one step'); return; }
+      if (!mealType) { setErr('Please choose a meal type'); return; }
 
       const payload = {
         title,
@@ -52,6 +55,7 @@ export default function RecipeCreate() {
         // API create will serialize ingredients/steps appropriately
         ingredients: ingredients,
         steps: steps,
+        meal_type: mealType,
         // pass through; API will also enforce/derive current user id
         author_id: user.id,
         created_at: new Date().toISOString()
@@ -75,6 +79,25 @@ export default function RecipeCreate() {
           <label htmlFor="cover" style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Cover image</label>
           <input id="cover" type="file" accept="image/*" onChange={(e)=>setCoverFile(e.target.files?.[0]||null)} />
         </div>
+
+        <Select
+          id="mealType"
+          label="Meal Type"
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
+          required
+        >
+          <option value="">Select meal type</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Vegan">Vegan</option>
+          <option value="Quick Meals">Quick Meals</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Kids Special">Kids Special</option>
+        </Select>
 
         <section className="card" style={{ padding: 12 }}>
           <h3 style={{ marginTop: 0 }}>Ingredients</h3>

@@ -47,6 +47,21 @@ export default function RecipeDetail() {
             <span>Author: {authorLabel}</span>
             <span>Servings: {recipe.servings || '-'}</span>
             <span>Cook time: {recipe.cook_time || '-'}m</span>
+            {recipe.meal_type && (
+              <span
+                aria-label="Meal type"
+                style={{
+                  background: 'rgba(37,99,235,0.08)',
+                  color: 'var(--color-primary)',
+                  border: '1px solid rgba(37,99,235,0.25)',
+                  padding: '2px 8px',
+                  borderRadius: '999px',
+                  fontSize: 12,
+                }}
+              >
+                {recipe.meal_type}
+              </span>
+            )}
           </div>
           <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
             {isOwner && (

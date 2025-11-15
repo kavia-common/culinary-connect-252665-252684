@@ -4,6 +4,7 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { recipesApi } from '../lib/api';
 import { uploadRecipeImage } from '../lib/storage';
+import { Select } from '../components/ui/Select';
 
 /**
  * PUBLIC_INTERFACE
@@ -19,6 +20,7 @@ export default function RecipeEdit() {
   const [cookTime, setCookTime] = React.useState('');
   const [coverFile, setCoverFile] = React.useState(null);
   const [err, setErr] = React.useState('');
+  const [mealType, setMealType] = React.useState('');
 
   const [ingredients, setIngredients] = React.useState([{ name: '', quantity: '' }]);
   const [steps, setSteps] = React.useState(['']);
@@ -29,6 +31,7 @@ export default function RecipeEdit() {
       setTitle(r?.title || '');
       setServings(r?.servings || '');
       setCookTime(r?.cook_time || '');
+      setMealType(r?.meal_type || '');
 
       // Parse ingredients from text (lines "qty name" or arbitrary)
       const ingLines = (r?.ingredients || '').split('\n').map((s) => s.trim()).filter(Boolean);
@@ -77,6 +80,7 @@ export default function RecipeEdit() {
       const hasStep = steps.some((s) => (s || '').trim().length > 0);
       if (!hasIngredient) { setErr('Please include at least one ingredient'); return; }
       if (!hasStep) { setErr('Please include at least one step'); return; }
+      if (!mealType) { setErr('Please choose a meal type'); return; }
 
       const payload = {
         title,
@@ -84,7 +88,8 @@ export default function RecipeEdit() {
         cook_time: cookTime ? Number(cookTime) : null,
         cover_url,
         ingredients,
-        steps
+        steps,
+        meal_type: mealType
       };
       await recipesApi.update(id, payload);
       navigate(`/recipes/${id}`);
@@ -105,6 +110,25 @@ export default function RecipeEdit() {
           <label htmlFor="cover" style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Replace cover image</label>
           <input id="cover" type="file" accept="image/*" onChange={(e)=>setCoverFile(e.target.files?.[0]||null)} />
         </div>
+
+        <Select
+          id="mealType"
+          label="Meal Type"
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
+          required
+        >
+          <option value="">Select meal type</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Vegan">Vegan</option>
+          <option value="Quick Meals">Quick Meals</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Kids Special">Kids Special</option>
+        </Select>
 
         <section className="card" style={{ padding: 12 }}>
           <h3 style={{ marginTop: 0 }}>Ingredients</h3>

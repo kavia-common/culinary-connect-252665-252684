@@ -20,6 +20,22 @@ export function RecipeCard({ recipe }) {
           <span aria-label="Author">👤 {authorLabel}</span>
           <span aria-label="Servings">🍽️ {recipe?.servings || '-'}</span>
           <span aria-label="Time">⏱️ {recipe?.cook_time || '-'}m</span>
+          {recipe?.meal_type && (
+            <span
+              aria-label="Meal type"
+              className="meal-badge"
+              style={{
+                marginLeft: 'auto',
+                background: 'rgba(37,99,235,0.08)',
+                color: 'var(--color-primary)',
+                border: '1px solid rgba(37,99,235,0.25)',
+                padding: '2px 8px',
+                borderRadius: '999px'
+              }}
+            >
+              {recipe.meal_type}
+            </span>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
           <Button as={Link} to={`/recipes/${recipe?.id}`} variant="ghost">View</Button>
