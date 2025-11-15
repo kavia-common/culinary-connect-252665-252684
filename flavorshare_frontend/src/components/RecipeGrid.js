@@ -20,7 +20,7 @@ export function RecipeGrid({ recipes }) {
     return <div style={{ color: '#64748b' }}>No recipes found.</div>;
   }
 
-  // Fixed responsive grid layout with explicit Tailwind-like classes and inline fallback
+  // Fixed responsive grid layout with explicit classes; prevent any horizontal overflow/scroll snapping/nowrap
   return (
     <div
       role="list"
@@ -28,7 +28,9 @@ export function RecipeGrid({ recipes }) {
       className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       style={{
         display: 'grid',
-        gap: 32
+        gap: 32,
+        overflowX: 'hidden',
+        whiteSpace: 'normal'
       }}
     >
       {/* Each RecipeCard must be a direct child for proper grid placement */}

@@ -10,7 +10,7 @@ import { Footer } from '../components/Footer';
 export default function Layout({ children }) {
   /** Wraps pages with the global header and footer. */
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAFAFA' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAFAFA', overflowX: 'hidden' }}>
       <Header />
       <main style={{ flex: '1 1 auto' }}>
         {children}

@@ -89,7 +89,7 @@ export default function RecipeCard({ recipe }) {
             className="transition-transform duration-500"
             style={{
               width: '100%',
-              height: 200,
+              height: 200, // maintain consistent image height across cards
               objectFit: 'cover',
               display: 'block',
               transform: 'scale(1.0)',
