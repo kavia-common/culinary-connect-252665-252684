@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import './theme.css';
+import RoutesApp from './RoutesApp';
 
 // Diagnostic: mark client render path
 // eslint-disable-next-line no-console
@@ -15,7 +16,7 @@ if (!rootEl) {
   const root = ReactDOM.createRoot(rootEl);
   root.render(
     <React.StrictMode>
-      <App />
+      <RoutesApp />
     </React.StrictMode>
   );
 }
