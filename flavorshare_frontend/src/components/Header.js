@@ -33,26 +33,27 @@ export function Header() {
         top: 0,
         zIndex: 50,
         borderBottom: '1px solid rgba(17,24,39,0.06)',
+        background: 'linear-gradient(180deg, rgba(29,78,216,0.18), rgba(255,255,255,1))'
       }}
     >
       <div
         className="container"
         style={{
-          padding: '14px 0',
+          padding: '16px 0',
         }}
       >
         <div
-          className="animate-fadeIn"
+          className="animate-fadeIn transition-all duration-400 ease-out"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
-            background: 'rgba(255,255,255,0.75)',
-            backdropFilter: 'saturate(180%) blur(8px)',
+            gap: 14,
+            background: 'rgba(255,255,255,0.85)',
+            backdropFilter: 'saturate(180%) blur(10px)',
             border: '1px solid rgba(17,24,39,0.06)',
-            borderRadius: 16, // rounded-2xl
-            padding: 12,
-            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+            borderRadius: 20, // rounded-2xl+
+            padding: 14,
+            boxShadow: '0 6px 14px rgba(0,0,0,0.08)',
           }}
         >
           <Link
@@ -96,18 +97,20 @@ export function Header() {
           {/* Search */}
           <div
             role="search"
-            className="group transition-all duration-300 ease-out"
+            className="group transition-all duration-400 ease-out"
             style={{
-              flex: '1 1 480px',
+              flex: '1 1 520px',
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
+              gap: 12,
               background: '#f3f4f6',
               border: '1px solid rgba(17,24,39,0.08)',
-              borderRadius: 9999, // rounded-full
-              padding: '8px 12px',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+              borderRadius: 9999, // pill
+              padding: '10px 14px',
+              boxShadow: '0 6px 14px rgba(0,0,0,0.08)',
             }}
+            onFocus={(e) => { e.currentTarget.style.boxShadow = '0 16px 32px rgba(0,0,0,0.12)'; }}
+            onBlur={(e) => { e.currentTarget.style.boxShadow = '0 6px 14px rgba(0,0,0,0.08)'; }}
           >
             <span aria-hidden="true" style={{ color: '#64748b' }}>
               🔎
@@ -117,7 +120,7 @@ export function Header() {
               placeholder="Search recipes..."
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="transition-all duration-300 ease-out"
+              className="transition-all duration-400 ease-out"
               style={{
                 appearance: 'none',
                 border: 'none',
@@ -133,17 +136,19 @@ export function Header() {
             />
             <button
               onClick={() => navigate(`/search?q=${encodeURIComponent(q)}`)}
-              className="transition-colors duration-300 ease-out focus-visible:outline-none"
+              className="transition-colors duration-400 ease-out focus-visible:outline-none"
               style={{
-                border: '1px solid rgba(37,99,235,0.2)',
-                background: '#2563EB',
+                border: '1px solid rgba(29,78,216,0.25)',
+                background: '#1D4ED8',
                 color: '#fff',
-                padding: '8px 14px',
+                padding: '10px 16px',
                 borderRadius: 9999,
-                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                boxShadow: '0 10px 20px rgba(0,0,0,0.10)',
+                transform: 'translateZ(0)',
+                transition: 'background-color 400ms ease, box-shadow 400ms ease, transform 400ms ease'
               }}
-              onMouseOver={(e) => (e.currentTarget.style.background = '#1e40af')}
-              onMouseOut={(e) => (e.currentTarget.style.background = '#2563EB')}
+              onMouseOver={(e) => { e.currentTarget.style.background = '#1E40AF'; e.currentTarget.style.boxShadow = '0 16px 32px rgba(0,0,0,0.14)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = '#1D4ED8'; e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.10)'; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
               Search
             </button>
@@ -162,25 +167,25 @@ export function Header() {
             <NavLink
               to="/"
               end
-              className="transition-colors duration-200"
+              className="transition-colors duration-400"
               style={({ isActive }) => ({
-                padding: '8px 12px',
-                borderRadius: 10,
-                color: isActive ? '#2563EB' : '#475569',
-                background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
-                transition: 'color .2s ease',
+                padding: '10px 12px',
+                borderRadius: 12,
+                color: isActive ? '#1D4ED8' : '#475569',
+                background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
+                transition: 'color .4s ease, background-color .4s ease',
               })}
             >
               Home
             </NavLink>
             <NavLink
               to="/recipes/new"
-              className="transition-colors duration-200"
+              className="transition-colors duration-400"
               style={({ isActive }) => ({
-                padding: '8px 12px',
-                borderRadius: 10,
-                color: isActive ? '#2563EB' : '#475569',
-                background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                padding: '10px 12px',
+                borderRadius: 12,
+                color: isActive ? '#1D4ED8' : '#475569',
+                background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
               })}
             >
               Create
@@ -189,24 +194,24 @@ export function Header() {
               <>
                 <NavLink
                   to={`/profile/${user.id}`}
-                  className="transition-colors duration-200"
+                  className="transition-colors duration-400"
                   style={({ isActive }) => ({
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    color: isActive ? '#2563EB' : '#475569',
-                    background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    color: isActive ? '#1D4ED8' : '#475569',
+                    background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
                   })}
                 >
                   Profile
                 </NavLink>
                 <NavLink
                   to="/settings"
-                  className="transition-colors duration-200"
+                  className="transition-colors duration-400"
                   style={({ isActive }) => ({
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    color: isActive ? '#2563EB' : '#475569',
-                    background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    color: isActive ? '#1D4ED8' : '#475569',
+                    background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
                   })}
                 >
                   Settings
@@ -224,24 +229,24 @@ export function Header() {
               <>
                 <NavLink
                   to="/login"
-                  className="transition-colors duration-200"
+                  className="transition-colors duration-400"
                   style={({ isActive }) => ({
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    color: isActive ? '#2563EB' : '#475569',
-                    background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    color: isActive ? '#1D4ED8' : '#475569',
+                    background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
                   })}
                 >
                   Login
                 </NavLink>
                 <NavLink
                   to="/register"
-                  className="transition-colors duration-200"
+                  className="transition-colors duration-400"
                   style={({ isActive }) => ({
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    color: isActive ? '#2563EB' : '#475569',
-                    background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    padding: '10px 12px',
+                    borderRadius: 12,
+                    color: isActive ? '#1D4ED8' : '#475569',
+                    background: isActive ? 'rgba(29,78,216,0.10)' : 'transparent',
                   })}
                 >
                   Register

@@ -17,27 +17,27 @@ export function RecipeCard({ recipe }) {
     'Unknown';
 
   function getMealBadgeStyles(type) {
-    // Map meal types to pastel color styles
+    // Map meal types to slightly more saturated pastel color styles
     const map = {
       Breakfast: {
-        bg: 'rgba(59,130,246,0.12)',
+        bg: 'rgba(59,130,246,0.18)',  // blue-100 stronger
         color: '#1d4ed8',
-        border: '1px solid rgba(59,130,246,0.25)',
+        border: '1px solid rgba(59,130,246,0.32)',
       },
       Lunch: {
-        bg: 'rgba(16,185,129,0.12)',
+        bg: 'rgba(16,185,129,0.18)', // green-100 stronger
         color: '#047857',
-        border: '1px solid rgba(16,185,129,0.25)',
+        border: '1px solid rgba(16,185,129,0.32)',
       },
       Dinner: {
-        bg: 'rgba(234,179,8,0.16)',
+        bg: 'rgba(234,179,8,0.22)',  // yellow-100 stronger
         color: '#92400e',
-        border: '1px solid rgba(234,179,8,0.28)',
+        border: '1px solid rgba(234,179,8,0.34)',
       },
       Snacks: {
-        bg: 'rgba(249,115,22,0.12)',
+        bg: 'rgba(249,115,22,0.18)', // orange-100 stronger
         color: '#c2410c',
-        border: '1px solid rgba(249,115,22,0.25)',
+        border: '1px solid rgba(249,115,22,0.32)',
       },
     };
     const def = map[type] || map.Dinner;

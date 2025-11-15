@@ -8,19 +8,25 @@ code {
 
 /* Modern UI animations and small utility classes */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease both;
+  animation: fadeIn 0.4s ease both;
 }
 
-/* Utility helpers to emulate Tailwind style transitions (used inline via className) */
+/* Utility helpers */
 .transition-all { transition-property: all; }
 .transition-colors { transition-property: color, background-color, border-color, outline-color, box-shadow; }
 .duration-200 { transition-duration: 200ms; }
 .duration-300 { transition-duration: 300ms; }
+.duration-400 { transition-duration: 400ms; }
 .ease-out { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
 .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-from), var(--tw-gradient-to)); }
 .from-blue-50 { --tw-gradient-from: #eff6ff; }
 .to-white { --tw-gradient-to: #ffffff; }
+
+/* Bold preset helpers */
+.fade-in-400 { animation: fadeIn 0.4s ease both; }
+.hover-scale-105 { transition: transform 400ms ease; }
+.hover-scale-105:hover { transform: scale(1.05); }
