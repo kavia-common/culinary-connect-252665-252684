@@ -6,15 +6,14 @@ import RecipeCard from './recipe/RecipeCard.jsx';
  * RecipeGrid
  * Renders recipes in a responsive grid:
  * - 1 column on small screens
- * - 2 columns on medium (≥768px)
- * - Exactly 3 columns from large (≥1024px) and above
+ * - Exactly 3 columns from md (≥768px) and above
  * Each RecipeCard is a direct child of the grid to ensure proper wrapping.
  */
 export function RecipeGrid({ recipes }) {
   /**
    * PUBLIC_INTERFACE
-   * Always use a fixed responsive grid: 1/2/3 columns with wrapping.
-   * Horizontal scroll and auto-fit modes are disabled to enforce 3 columns on desktop.
+   * Always use a fixed responsive grid: 1/3 columns with wrapping (3 from md up).
+   * Horizontal scroll and auto-fit modes are disabled to enforce 3 columns on md+.
    */
   if (!recipes || recipes.length === 0) {
     return <div style={{ color: '#64748b' }}>No recipes found.</div>;
@@ -25,7 +24,7 @@ export function RecipeGrid({ recipes }) {
     <div
       role="list"
       aria-label="Recipe list"
-      className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      className="animate-fadeIn grid grid-cols-1 md:grid-cols-3 gap-8"
       style={{
         display: 'grid',
         gap: 32,
