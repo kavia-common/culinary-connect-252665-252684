@@ -1,5 +1,4 @@
 import React from 'react';
-import { RecipeGrid } from '../components/RecipeGrid';
 import { recipesApi } from '../lib/api';
 import FilterTabs from '../components/ui/FilterTabs.jsx';
 import SearchBar from '../components/ui/SearchBar.jsx';
@@ -7,10 +6,10 @@ import SearchBar from '../components/ui/SearchBar.jsx';
 /**
  * PUBLIC_INTERFACE
  * Home
- * Public feed with hero gradient, filter tabs, and responsive grid.
+ * Public feed with hero gradient, filter tabs, and responsive image-only gallery grid.
  */
 export default function Home() {
-  /** Keep existing fetching logic; present responsive grid by default. */
+  /** Keep existing fetching logic; present image-only grid by default. */
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [tab, setTab] = React.useState('popular');
@@ -34,6 +33,16 @@ export default function Home() {
     })();
     return () => { active = false; };
   }, [tab]);
+
+  // Helper to derive best image URL with fallback placeholder
+  function getImageUrl(recipe) {
+    return (
+      recipe?.image ||
+      recipe?.cover_url ||
+      recipe?.imageUrl ||
+      'https://placehold.co/600x450?text=Recipe'
+    );
+  }
 
   return (
     <div className="block-full" style={{ background: '#fafafa', minHeight: 'calc(100vh - 64px)' }}>
@@ -65,44 +74,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Listing */}
-      <div className="container no-overflow-x" style={{ paddingTop: 20, paddingBottom: 40, overflowX: 'hidden' }}>
+      {/* Image-only Gallery */}
+      <div className="container" style={{ paddingTop: 20, paddingBottom: 40, overflowX: 'hidden' }}>
         {loading ? (
-          // Loading skeletons: grid placeholders to match fixed 1/2/3 layout
+          // Loading skeletons: image-only placeholders in fixed 1/3 layout
           <div
             role="list"
             aria-label="Loading recipes"
-            className="force-grid grid grid-cols-1 md:grid-cols-3 gap-8 block-full normal-whitespace"
-            style={{ display: 'grid', gap: 32, overflowX: 'hidden', whiteSpace: 'normal' }}
+            className="force-grid grid grid-cols-1 md:grid-cols-3 gap-6 block-full normal-whitespace"
+            style={{ display: 'grid', gap: 24, overflowX: 'hidden', whiteSpace: 'normal' }}
           >
             {new Array(6).fill(0).map((_, i) => (
               <div
                 key={i}
                 role="listitem"
-                className="card"
-                style={{ borderRadius: 16, overflow: 'hidden' }}
+                className="overflow-hidden rounded-xl bg-white shadow-sm"
               >
-                <div className="skeleton" style={{ width: '100%', height: 200 }} />
-                <div style={{ padding: 16, display: 'grid', gap: 8 }}>
-                  <div className="skeleton" style={{ width: '70%', height: 16 }} />
-                  <div className="skeleton" style={{ width: '50%', height: 12 }} />
-                  <div className="skeleton" style={{ width: '90%', height: 12 }} />
-                </div>
+                <div className="skeleton" style={{ width: '100%', height: 192 }} />
               </div>
             ))}
           </div>
         ) : (
           <section
             role="region"
-            aria-label="Recipes"
+            aria-label="Recipes image gallery"
             className="animate-fadeIn block-full"
-            style={{ display: 'grid', gap: 16 }}
+            style={{ display: 'grid', gap: 12 }}
           >
-            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h2 style={{ margin: 0, fontSize: 18 }}>Trending recipes</h2>
-            </header>
-            {/* Fixed 1/2/3 responsive columns on desktop widths */}
-            <RecipeGrid recipes={recipes} />
+            {/* The gallery grid: images are direct children */}
+            <div
+              className="force-grid grid grid-cols-1 md:grid-cols-3 gap-6 no-overflow-x normal-whitespace"
+              style={{ display: 'grid', gap: 24, overflowX: 'hidden', whiteSpace: 'normal' }}
+            >
+              {recipes.map((recipe, idx) => (
+                <div
+                  key={recipe.id || idx}
+                  className="overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow"
+                  role="listitem"
+                >
+                  <img
+                    src={getImageUrl(recipe)}
+                    alt={recipe?.title || 'Recipe image'}
+                    className="block w-full"
+                    style={{
+                      width: '100%',
+                      height: 192, // ~ h-48 to approximate 4:3 crop for typical widths
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </section>
         )}
       </div>
