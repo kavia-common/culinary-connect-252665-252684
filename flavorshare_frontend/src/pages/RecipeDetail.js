@@ -57,6 +57,32 @@ export default function RecipeDetail() {
           </div>
         </div>
       </article>
+
+      <article className="card" style={{ marginTop: 16, padding: 16 }}>
+        <h2 style={{ marginTop: 0 }}>Ingredients</h2>
+        {recipe.ingredients ? (
+          <ul style={{ paddingLeft: 18, lineHeight: 1.7 }}>
+            {recipe.ingredients.split('\n').map((line, idx) => (
+              <li key={idx}>{line}</li>
+            ))}
+          </ul>
+        ) : (
+          <div style={{ color: 'var(--color-muted)' }}>No ingredients listed.</div>
+        )}
+      </article>
+
+      <article className="card" style={{ marginTop: 16, padding: 16 }}>
+        <h2 style={{ marginTop: 0 }}>Steps</h2>
+        {recipe.instructions ? (
+          <ol style={{ paddingLeft: 18, lineHeight: 1.7 }}>
+            {recipe.instructions.split('\n').map((line, idx) => (
+              <li key={idx}>{line.replace(/^\s*\d+\)\s*/, '')}</li>
+            ))}
+          </ol>
+        ) : (
+          <div style={{ color: 'var(--color-muted)' }}>No steps provided.</div>
+        )}
+      </article>
     </div>
   );
 }
