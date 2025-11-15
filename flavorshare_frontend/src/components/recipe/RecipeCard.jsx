@@ -1,123 +1,106 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// Requires: npm install lucide-react
-import { Clock3, Users, Eye, ChefHat, Utensils } from 'lucide-react';
+import { Clock3, Users, Star, ChefHat } from 'lucide-react';
 
 /**
  * PUBLIC_INTERFACE
- * RecipeCard (Redesigned)
- * A modern elevated card with hover effects, image zoom, meal_type/difficulty badge, author block, and CTA.
+ * RecipeCard (Refined)
+ * A structured card with consistent image sizing, compact info row, improved hierarchy,
+ * and a footer section housing the View Recipe button. Preserves hover scale and image zoom effects.
  */
 export default function RecipeCard({ recipe }) {
-  /** Render a beautiful responsive recipe card with safe fallbacks. */
+  /** Render refined recipe card with safe fallbacks and consistent layout. */
   const img =
+    recipe?.image ||
     recipe?.cover_url ||
     recipe?.imageUrl ||
     '/api/placeholder/400/250';
 
-  // Author derivation
+  // Author/Avatar
   const authorName =
     recipe?.author?.display_name ||
     recipe?.author?.username ||
     recipe?.author_username ||
     'Unknown';
-
   const avatarUrl =
     recipe?.author?.avatar_url ||
     recipe?.author?.avatar ||
     '/api/placeholder/32/32';
 
-  // Meal type badge mapping
+  // Meta
+  const time = recipe?.cook_time || recipe?.totalTime || null;
+  const servings = recipe?.servings || null;
+  // Rating optional; if not present keep space consistent
+  const rating = typeof recipe?.rating === 'number' ? recipe.rating : null;
+
+  // Keep any existing badges; align top-right (meal_type/difficulty)
   const mealType = recipe?.meal_type || null;
   const difficulty = recipe?.difficulty || null;
 
-  function mealTypeBadgeStyle(type) {
-    const map = {
-      Breakfast: 'background: rgba(59,130,246,0.12); color:#1d4ed8; border:1px solid rgba(59,130,246,0.25)',
-      Lunch: 'background: rgba(16,185,129,0.12); color:#047857; border:1px solid rgba(16,185,129,0.25)',
-      Dinner: 'background: rgba(234,179,8,0.16); color:#92400e; border:1px solid rgba(234,179,8,0.28)',
-      Snacks: 'background: rgba(249,115,22,0.12); color:#c2410c; border:1px solid rgba(249,115,22,0.25)',
-    };
-    return map[type] || map.Dinner;
+  // Hover handlers
+  function onCardOver(e) {
+    e.currentTarget.style.transform = 'translateY(-2px) scale(1.01)';
+    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.10)';
   }
-
-  const time = recipe?.cook_time || recipe?.totalTime || null;
-  const servings = recipe?.servings || null;
-  const views = recipe?.views || null;
+  function onCardOut(e) {
+    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+    e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.04)';
+  }
+  function onImgOver(e) {
+    e.currentTarget.style.transform = 'scale(1.10)';
+  }
+  function onImgOut(e) {
+    e.currentTarget.style.transform = 'scale(1.0)';
+  }
 
   return (
     <article
       className="group fade-in"
       style={{
         background: '#ffffff',
-        border: '1px solid rgba(17,24,39,0.06)',
-        borderRadius: 24, // rounded-3xl
+        border: '1px solid #f1f5f9', // border-gray-100
+        borderRadius: 16, // rounded-2xl
         overflow: 'hidden',
-        boxShadow: '0 6px 14px rgba(0,0,0,0.06)',
-        transform: 'translateZ(0)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)', // shadow-sm
         transition: 'transform 300ms ease, box-shadow 300ms ease',
+        transform: 'translateZ(0)',
       }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = '0 18px 36px rgba(0,0,0,0.12)';
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 6px 14px rgba(0,0,0,0.06)';
-      }}
+      onMouseOver={onCardOver}
+      onMouseOut={onCardOut}
     >
-      {/* Image header with badge */}
-      <div
-        style={{
-          position: 'relative',
-          height: 200,
-          background: '#e5e7eb',
-        }}
-      >
+      {/* Image */}
+      <div style={{ position: 'relative' }}>
         <img
           src={img}
           alt={recipe?.title ? `${recipe.title} cover` : 'Recipe image'}
+          className="group-hover:scale-110 transition-transform duration-500"
           style={{
             width: '100%',
-            height: '100%',
+            height: 192, // h-48
             objectFit: 'cover',
             display: 'block',
-            transform: 'scale(1)',
-            transition: 'transform 420ms ease',
+            borderTopLeftRadius: 16, // rounded-t-2xl
+            borderTopRightRadius: 16,
+            transform: 'scale(1.0)',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-          onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+          onMouseOver={onImgOver}
+          onMouseOut={onImgOut}
         />
 
-        {/* Badge top-right: prefer meal_type; else difficulty */}
         {(mealType || difficulty) && (
           <div
-            aria-label="Recipe category"
             style={{
               position: 'absolute',
               top: 12,
               right: 12,
-              padding: '6px 10px',
+              padding: '4px 10px',
               borderRadius: 9999,
               fontSize: 12,
-              fontWeight: 700,
-              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-              ...(mealType
-                ? Object.fromEntries(
-                    mealTypeBadgeStyle(mealType)
-                      .split(';')
-                      .filter(Boolean)
-                      .map((rule) => {
-                        const [k, v] = rule.split(':').map((s) => s.trim());
-                        const camel = k.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-                        return [camel, v];
-                      })
-                  )
-                : {
-                    background: 'rgba(99,102,241,0.12)',
-                    color: '#3730a3',
-                    border: '1px solid rgba(99,102,241,0.25)',
-                  }),
+              fontWeight: 600,
+              background: 'rgba(37,99,235,0.10)',
+              color: '#1e40af',
+              border: '1px solid rgba(37,99,235,0.20)',
+              backdropFilter: 'saturate(140%) blur(2px)',
             }}
           >
             {mealType || difficulty}
@@ -126,81 +109,90 @@ export default function RecipeCard({ recipe }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: 16, display: 'grid', gap: 10 }}>
-        <h3
-          style={{
-            margin: 0,
-            fontSize: 18,
-            fontWeight: 800,
-            color: '#0f172a',
-            lineHeight: 1.25,
-          }}
-        >
+      <div style={{ padding: 24 }}>
+        {/* Title and description */}
+        <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800 }} className="mb-2">
           {recipe?.title || 'Untitled recipe'}
-        </h3>
+        </h2>
+        {recipe?.description && (
+          <p style={{ margin: 0, color: '#4b5563' }} className="mb-4">
+            {recipe.description}
+          </p>
+        )}
 
-        {/* Author block */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img
-            src={avatarUrl}
-            alt={`${authorName} avatar`}
-            width={28}
-            height={28}
-            style={{ borderRadius: 9999, border: '1px solid rgba(17,24,39,0.08)', objectFit: 'cover' }}
-          />
-          <div style={{ display: 'grid', gap: 2 }}>
-            <span style={{ fontSize: 13, color: '#0f172a', fontWeight: 600 }}>{authorName}</span>
-            <span style={{ fontSize: 12, color: '#64748b', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <ChefHat size={14} /> Creator
-            </span>
-          </div>
-        </div>
-
-        {/* Stats */}
+        {/* Compact info row */}
         <div
           style={{
             display: 'flex',
+            alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 10,
+            gap: 12,
             flexWrap: 'wrap',
-            color: '#475569',
-            fontSize: 13,
           }}
         >
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Clock3 size={16} /> {time ? `${time}m` : '—'}
+          {/* Left: author */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <img
+              src={avatarUrl}
+              alt={`${authorName} avatar`}
+              width={28}
+              height={28}
+              style={{
+                borderRadius: 9999,
+                border: '1px solid rgba(17,24,39,0.08)',
+                objectFit: 'cover',
+                flex: '0 0 auto',
+              }}
+            />
+            <div style={{ display: 'grid', lineHeight: 1.1 }}>
+              <span style={{ fontSize: 13, color: '#0f172a', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {authorName}
+              </span>
+              <span style={{ fontSize: 12, color: '#64748b' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <ChefHat size={14} /> Creator
+                </span>
+              </span>
+            </div>
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Users size={16} /> {servings || '—'}
-          </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Eye size={16} /> {typeof views === 'number' ? views : '—'}
+
+          {/* Right: time and rating */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, color: '#475569', fontSize: 13 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <Clock3 size={16} /> {time ? `${time}m` : '—'}
+            </span>
+            {typeof servings === 'number' && (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <Users size={16} /> {servings}
+              </span>
+            )}
+            {rating !== null && (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <Star size={16} color="#f59e0b" fill="#f59e0b" /> {rating.toFixed(1)}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* CTA */}
-        <div style={{ display: 'flex', gap: 10, marginTop: 2 }}>
+        {/* Footer with button */}
+        <div className="mt-4" style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
           <Link
             to={`/recipes/${recipe?.id}`}
-            className="transition-all duration-300 ease-out"
+            className="transition-colors"
             style={{
-              background:
-                'linear-gradient(135deg, rgba(245,158,11,1), rgba(251,191,36,1))',
-              color: '#111827',
-              fontWeight: 800,
+              width: '100%',
+              display: 'inline-block',
+              textAlign: 'center',
+              background: '#f97316', // bg-orange-500
+              color: '#ffffff',
               padding: '10px 14px',
-              borderRadius: 14,
-              border: '1px solid rgba(245,158,11,0.3)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              boxShadow: '0 2px 4px rgba(0,0,0,0.06)',
+              borderRadius: 10, // rounded-lg
+              fontWeight: 600,
             }}
-            onMouseOver={(e) => (e.currentTarget.style.filter = 'brightness(0.98)')}
-            onMouseOut={(e) => (e.currentTarget.style.filter = 'none')}
+            onMouseOver={(e) => (e.currentTarget.style.background = '#ea580c')} // hover:bg-orange-600
+            onMouseOut={(e) => (e.currentTarget.style.background = '#f97316')}
             aria-label={`View recipe ${recipe?.title || ''}`}
           >
-            <Utensils size={16} />
             View Recipe
           </Link>
         </div>
