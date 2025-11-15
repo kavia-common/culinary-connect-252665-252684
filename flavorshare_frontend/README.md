@@ -18,11 +18,10 @@ In the project directory, you can run:
 Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-If port 3000 is already in use, set an explicit port to avoid interactive prompts:
-- Linux/macOS: `REACT_APP_PORT=3001 npm start`
-- Windows (cmd): `set REACT_APP_PORT=3001 && npm start`
-
-This template disables browser auto-open and binds to 0.0.0.0 for container previews.
+Non-interactive start with predictable port:
+- Default port is 3000. To change: `REACT_APP_PORT=3001 npm start`
+- The start script sets BROWSER=none and HOST=0.0.0.0 for container previews.
+- No interactive prompts occur; the start script resolves the port via a Node helper.
 
 ### `npm test`
 

@@ -47,6 +47,9 @@ function App() {
         <p>
           App running on port: <strong>{process.env.REACT_APP_PORT || '3000'}</strong>
         </p>
+        <p style={{ fontSize: 14, opacity: 0.8 }}>
+          Supabase configured: URL [{process.env.REACT_APP_SUPABASE_URL ? 'yes' : 'no'}], Key [{process.env.REACT_APP_SUPABASE_KEY ? 'yes' : 'no'}]
+        </p>
         <a
           className="App-link"
           href="https://reactjs.org"
