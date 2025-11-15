@@ -5,14 +5,21 @@ A responsive React application for discovering and sharing recipes, themed with 
 ## Quick start
 
 1. Install dependencies
-   npm install
+   - npm install
 
 2. Configure environment
-   Copy .env.example to .env and set required variables.
+   - cp .env.example .env
+   - Fill in:
+     - REACT_APP_SUPABASE_URL
+     - REACT_APP_SUPABASE_KEY
+     - Optionally set REACT_APP_FRONTEND_URL (used for email redirect on sign-up)
 
 3. Run the app
-   npm start
-   The dev server uses HOST=0.0.0.0, BROWSER=none and defaults to port 3000 (override with REACT_APP_PORT).
+   - npm start
+   - The dev server uses HOST=0.0.0.0, BROWSER=none and defaults to port 3000 (override with REACT_APP_PORT).
+
+4. Build for production
+   - npm run build
 
 ## Required environment variables
 
@@ -21,6 +28,7 @@ See .env.example for full list. Minimum required for Supabase:
 - REACT_APP_SUPABASE_KEY
 Optional:
 - REACT_APP_FRONTEND_URL (used for email redirect on sign-up)
+- REACT_APP_PORT (dev server port override)
 
 ## Features
 - Authentication (register, login, logout)
@@ -34,10 +42,10 @@ Optional:
 ## Tech
 - React 18 + react-router-dom
 - @supabase/supabase-js
-- Vanilla CSS (src/theme.css)
+- Vanilla CSS (src/theme.css) imported globally via src/index.js
 
 ## Notes
-- Protected routes: create/edit, settings.
+- Protected routes: create/edit, settings (via components/ProtectedRoute).
 - Storage requires buckets: "recipe-images", "avatars" with public access or policies providing read.
 - Database tables expected: profiles, recipes, tags, recipe_tags, favorites, follows, (optional) comments.
 
@@ -49,4 +57,5 @@ flowchart LR
 
 ```diff
 + The main app now mounts RoutesApp in src/index.js
++ Global theme styles are imported from src/theme.css
 ```
