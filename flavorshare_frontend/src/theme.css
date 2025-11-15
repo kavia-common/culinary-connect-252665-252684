@@ -87,8 +87,9 @@ a { color: inherit; text-decoration: none; }
   display: grid; grid-template-columns: repeat(12, 1fr);
   gap: 16px;
 }
+/* Sidebar styles retained for backward compatibility but unused */
 .sidebar { grid-column: span 3; }
-.main { grid-column: span 9; }
+.main { grid-column: span 12; } /* Default main to full width when no sidebar present */
 
 @media (max-width: 960px) {
   .grid { grid-template-columns: repeat(1, 1fr); }

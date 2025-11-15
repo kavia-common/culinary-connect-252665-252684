@@ -17,6 +17,7 @@ export default function Search() {
   });
   const debounced = useDebounce(query, 400);
 
+  // Tag-based filtering is disabled in UI; only text search is used
   const { recipes, loading, setSearch } = useRecipes({ initialSearch: debounced });
 
   // Keep local state in sync when URL changes externally (e.g., via header)

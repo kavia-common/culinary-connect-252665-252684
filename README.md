@@ -7,6 +7,9 @@ This workspace contains the FlavorShare frontend implemented with React and Supa
 - Configure env via flavorshare_frontend/.env.example (copy to .env and set values)
 - Docs: flavorshare_frontend/README.md
 
+## Feature note: Filters UI
+- The frontend currently has Filters (tags) disabled/removed from pages. The internal APIs (tagsApi, recipesApi with tagId) remain available for future use, but the UI does not invoke tag-based filtering.
+
 ## Supabase schema and storage setup
 
 Use the helper SQL file to provision tables, RLS policies, and storage buckets required by the app.

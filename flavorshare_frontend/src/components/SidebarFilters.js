@@ -5,6 +5,7 @@ import { tagsApi } from '../lib/api';
 /**
  * PUBLIC_INTERFACE
  * SidebarFilters
+ * Note: This component is currently not used in the UI. It is retained for future re-enablement of tag filters.
  */
 export function SidebarFilters({ tags: tagsProp = [], selectedTag = '', onTagChange }) {
   /** Tag filter sidebar that loads tags on mount and exposes selection. Provides fallback tags when Supabase has none. */
