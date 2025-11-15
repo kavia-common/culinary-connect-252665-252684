@@ -20,20 +20,25 @@ export function RecipeGrid({ recipes }) {
     return <div style={{ color: '#64748b' }}>No recipes found.</div>;
   }
 
-  // Fixed responsive grid layout: 1 col mobile, 2 cols on md (≥768px), 3 cols on lg+ (≥1024px)
+  // Fixed responsive grid layout with explicit Tailwind-like classes and inline fallback
   return (
     <div
       role="list"
       aria-label="Recipe list"
-      className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6"
+      className="animate-fadeIn grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       style={{
         display: 'grid',
-        gap: 24
+        gap: 32
       }}
     >
       {/* Each RecipeCard must be a direct child for proper grid placement */}
       {recipes.map((r, idx) => (
-        <div key={r.id} role="listitem" className="animate-fadeIn" style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}>
+        <div
+          key={r.id}
+          role="listitem"
+          className="animate-fadeIn"
+          style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
+        >
           <RecipeCard recipe={r} />
         </div>
       ))}
