@@ -4,21 +4,25 @@ import RecipeCard from './recipe/RecipeCard.jsx';
 /**
  * PUBLIC_INTERFACE
  * RecipeGrid
- * Renders recipes either as a responsive grid or as a horizontal scroll row with snap.
+ * Renders recipes in a responsive grid:
+ * - 1 column on small screens
+ * - 2 columns on medium (≥640px)
+ * - 3 columns on large (≥1024px)
+ * Each RecipeCard is a direct child of the grid to ensure proper wrapping.
  */
-export function RecipeGrid({ recipes, layout = 'horizontal' }) {
+export function RecipeGrid({ recipes, layout = 'grid' }) {
   /**
    * PUBLIC_INTERFACE
    * layout:
-   * - 'horizontal' (default): horizontal scroll row with snap and fixed card width
-   * - 'grid': traditional responsive grid
+   * - 'grid' (default): responsive 1/2/3 columns with wrapping
+   * - 'horizontal': optional horizontal scroll row (disabled by default)
    */
   if (!recipes || recipes.length === 0) {
     return <div style={{ color: '#64748b' }}>No recipes found.</div>;
   }
 
   if (layout === 'horizontal') {
-    // Horizontal scroll row
+    // Retain optional horizontal mode if explicitly requested elsewhere
     return (
       <div
         role="list"
@@ -31,18 +35,12 @@ export function RecipeGrid({ recipes, layout = 'horizontal' }) {
           overflowY: 'hidden',
           scrollSnapType: 'x mandatory',
           WebkitOverflowScrolling: 'touch',
-          paddingBottom: 6, // breathing room for shadows
-          scrollbarWidth: 'none', // Firefox hide
-          msOverflowStyle: 'none', // IE/Edge
-        }}
-        // Hide scrollbar (WebKit)
-        onScroll={(e) => {
-          // no-op; hook left for future analytics.
+          paddingBottom: 6,
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}
       >
-        {/* Hide scrollbar for WebKit */}
         <style>{`
-          /* Hide scrollbar for WebKit-based browsers */
           div[aria-label="Recipe list"]::-webkit-scrollbar {
             display: none;
             height: 0;
@@ -58,8 +56,8 @@ export function RecipeGrid({ recipes, layout = 'horizontal' }) {
             style={{
               animationDelay: `${Math.min(idx * 40, 240)}ms`,
               flex: '0 0 auto',
-              minWidth: 280, // min-w-[280px]
-              width: 288, // ~ w-72 (18rem)
+              minWidth: 280,
+              width: 288,
               scrollSnapAlign: 'start',
             }}
           >
@@ -70,25 +68,33 @@ export function RecipeGrid({ recipes, layout = 'horizontal' }) {
     );
   }
 
-  // Fallback grid layout
+  // Default responsive grid layout: grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6
+  // Use CSS-in-JS to mimic Tailwind behavior so we don't depend on runtime Tailwind processing.
   return (
     <div
       role="list"
+      className="animate-fadeIn"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
         gap: 24, // gap-6
       }}
     >
+      <style>{`
+        @media (min-width: 640px) {
+          div[role="list"].animate-fadeIn {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @media (min-width: 1024px) {
+          div[role="list"].animate-fadeIn {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+      `}</style>
       {recipes.map((r, idx) => (
-        <div
-          key={r.id}
-          role="listitem"
-          className="animate-fadeIn"
-          style={{ animationDelay: `${Math.min(idx * 40, 240)}ms` }}
-        >
-          <RecipeCard recipe={r} />
-        </div>
+        // Ensure each RecipeCard is a direct child of the grid
+        <RecipeCard key={r.id} recipe={r} data-anim-delay={Math.min(idx * 40, 240)} />
       ))}
     </div>
   );

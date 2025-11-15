@@ -7,10 +7,10 @@ import SearchBar from '../components/ui/SearchBar.jsx';
 /**
  * PUBLIC_INTERFACE
  * Home
- * Public feed with hero gradient, filter tabs, and responsive grid or horizontal row.
+ * Public feed with hero gradient, filter tabs, and responsive grid.
  */
 export default function Home() {
-  /** Keep existing fetching logic; present redesigned layout + horizontal row by default. */
+  /** Keep existing fetching logic; present responsive grid by default. */
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [tab, setTab] = React.useState('popular');
@@ -20,14 +20,11 @@ export default function Home() {
     (async () => {
       setLoading(true);
       try {
-        // Sorting logic placeholder based on tab; API currently orders by created_at desc by default.
         const res = await recipesApi.list({ page: 1, pageSize: 12, search: '' });
         let data = res.data || [];
         if (tab === 'quick') {
-          // naive client filter: cook_time <= 20 if available
           data = data.filter((r) => (r?.cook_time || 999) <= 20);
         }
-        // 'popular' and 'newest' currently share default backend ordering; keep as-is
         if (active) setRecipes(data);
       } catch {
         if (active) setRecipes([]);
@@ -71,23 +68,30 @@ export default function Home() {
       {/* Listing */}
       <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
         {loading ? (
-          // Loading skeletons: emulate horizontal row with fixed-width skeleton cards
+          // Loading skeletons: grid placeholders to match final 1/2/3 layout
           <div
             role="list"
             aria-label="Loading recipes"
             style={{
-              display: 'flex',
-              gap: 16,
-              overflow: 'hidden',
-              paddingBottom: 6,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+              gap: 24,
             }}
           >
+            <style>{`
+              @media (min-width: 640px) {
+                div[aria-label="Loading recipes"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+              }
+              @media (min-width: 1024px) {
+                div[aria-label="Loading recipes"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+              }
+            `}</style>
             {new Array(6).fill(0).map((_, i) => (
               <div
                 key={i}
                 role="listitem"
                 className="card"
-                style={{ borderRadius: 16, overflow: 'hidden', minWidth: 280, width: 288, flex: '0 0 auto' }}
+                style={{ borderRadius: 16, overflow: 'hidden' }}
               >
                 <div className="skeleton" style={{ width: '100%', height: 200 }} />
                 <div style={{ padding: 16, display: 'grid', gap: 8 }}>
@@ -107,9 +111,9 @@ export default function Home() {
           >
             <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ margin: 0, fontSize: 18 }}>Trending recipes</h2>
-              {/* Future toggle could go here to swap between "horizontal" and "grid" */}
             </header>
-            <RecipeGrid recipes={recipes} layout="horizontal" />
+            {/* Default to grid with 1/2/3 responsive columns */}
+            <RecipeGrid recipes={recipes} layout="grid" />
           </section>
         )}
       </div>
