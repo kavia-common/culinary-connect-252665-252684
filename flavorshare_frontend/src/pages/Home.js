@@ -7,10 +7,10 @@ import SearchBar from '../components/ui/SearchBar.jsx';
 /**
  * PUBLIC_INTERFACE
  * Home
- * Public feed with hero gradient, filter tabs, and responsive grid.
+ * Public feed with hero gradient, filter tabs, and responsive grid or horizontal row.
  */
 export default function Home() {
-  /** Keep existing fetching logic; present redesigned layout + grid. */
+  /** Keep existing fetching logic; present redesigned layout + horizontal row by default. */
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [tab, setTab] = React.useState('popular');
@@ -68,18 +68,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Grid */}
+      {/* Listing */}
       <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
         {loading ? (
-          // Loading skeletons: use the same responsive grid with consistent gaps
+          // Loading skeletons: emulate horizontal row with fixed-width skeleton cards
           <div
-            style={{ display: 'grid', gap: 24 }}
-            className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl"
             role="list"
             aria-label="Loading recipes"
+            style={{
+              display: 'flex',
+              gap: 16,
+              overflow: 'hidden',
+              paddingBottom: 6,
+            }}
           >
-            {new Array(8).fill(0).map((_, i) => (
-              <div key={i} role="listitem" className="card" style={{ borderRadius: 16, overflow: 'hidden' }}>
+            {new Array(6).fill(0).map((_, i) => (
+              <div
+                key={i}
+                role="listitem"
+                className="card"
+                style={{ borderRadius: 16, overflow: 'hidden', minWidth: 280, width: 288, flex: '0 0 auto' }}
+              >
                 <div className="skeleton" style={{ width: '100%', height: 200 }} />
                 <div style={{ padding: 16, display: 'grid', gap: 8 }}>
                   <div className="skeleton" style={{ width: '70%', height: 16 }} />
@@ -90,20 +99,18 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          // Ensure RecipeCard is a direct child of the grid by letting RecipeGrid render items directly
-          <div
+          <section
             role="region"
             aria-label="Recipes"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: 24, // gap-6 equivalent
-            }}
             className="animate-fadeIn"
+            style={{ display: 'grid', gap: 16 }}
           >
-            {/* RecipeGrid already maps recipes -> direct children with the appropriate structure */}
-            <RecipeGrid recipes={recipes} />
-          </div>
+            <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ margin: 0, fontSize: 18 }}>Trending recipes</h2>
+              {/* Future toggle could go here to swap between "horizontal" and "grid" */}
+            </header>
+            <RecipeGrid recipes={recipes} layout="horizontal" />
+          </section>
         )}
       </div>
     </div>

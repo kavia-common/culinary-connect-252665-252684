@@ -54,3 +54,20 @@ code {
 @media (min-width: 768px) { .grid-2col-md { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 1024px) { .grid-3col-lg { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1280px) { .grid-4col-xl { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* Horizontal scroll helpers (optional global utilities) */
+.h-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  ms-overflow-style: none;
+}
+.h-scroll::-webkit-scrollbar { display: none; height: 0; width: 0; background: transparent; }
+.snap-start { scroll-snap-align: start; }
+.minw-280 { min-width: 280px; }
+.w-288 { width: 288px; }
