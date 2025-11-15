@@ -1,24 +1,34 @@
 import React from 'react';
 import { RecipeGrid } from '../components/RecipeGrid';
 import { recipesApi } from '../lib/api';
+import FilterTabs from '../components/ui/FilterTabs.jsx';
+import SearchBar from '../components/ui/SearchBar.jsx';
 
 /**
  * PUBLIC_INTERFACE
- * Home (Redesigned)
- * Public feed with hero, subtle controls, and responsive grid.
+ * Home
+ * Public feed with hero gradient, filter tabs, and responsive grid.
  */
 export default function Home() {
   /** Keep existing fetching logic; present redesigned layout + grid. */
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [tab, setTab] = React.useState('popular');
 
   React.useEffect(() => {
     let active = true;
     (async () => {
       setLoading(true);
       try {
+        // Sorting logic placeholder based on tab; API currently orders by created_at desc by default.
         const res = await recipesApi.list({ page: 1, pageSize: 12, search: '' });
-        if (active) setRecipes(res.data || []);
+        let data = res.data || [];
+        if (tab === 'quick') {
+          // naive client filter: cook_time <= 20 if available
+          data = data.filter((r) => (r?.cook_time || 999) <= 20);
+        }
+        // 'popular' and 'newest' currently share default backend ordering; keep as-is
+        if (active) setRecipes(data);
       } catch {
         if (active) setRecipes([]);
       } finally {
@@ -26,91 +36,34 @@ export default function Home() {
       }
     })();
     return () => { active = false; };
-  }, []);
+  }, [tab]);
 
   return (
-    <div
-      style={{
-        background: '#fafafa',
-        minHeight: 'calc(100vh - 64px)',
-      }}
-    >
+    <div style={{ background: '#fafafa', minHeight: 'calc(100vh - 64px)' }}>
       {/* Hero */}
       <section
         className="animate-fadeIn"
         style={{
-          background:
-            'radial-gradient(1200px 400px at 10% -10%, rgba(37,99,235,0.10), transparent), linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,250,1))',
+          background: 'linear-gradient(180deg, rgba(255,107,53,0.12), rgba(255,61,0,0.08))',
           borderBottom: '1px solid rgba(17,24,39,0.06)',
         }}
       >
-        <div className="container" style={{ paddingTop: 28, paddingBottom: 24 }}>
-          <div style={{ display: 'grid', gap: 6 }}>
-            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 900, color: '#0f172a' }}>
-              Discover delicious recipes
+        <div className="container" style={{ paddingTop: 32, paddingBottom: 28 }}>
+          <div style={{ display: 'grid', gap: 10, textAlign: 'center' }}>
+            <h1 style={{ margin: 0, fontSize: 30, fontWeight: 900, color: '#0f172a' }}>
+              Cook something wonderful today
             </h1>
             <p style={{ margin: 0, color: '#475569' }}>
-              Fresh ideas from the FlavorShare community — quick meals, cozy dinners, and more.
+              Handpicked recipes from the FlavorShare community. Quick, cozy, and delicious.
             </p>
           </div>
-          {/* Controls placeholder (future filters/toggles) */}
-          <div
-            className="transition-all duration-300 ease-out"
-            style={{
-              display: 'flex',
-              gap: 8,
-              marginTop: 16,
-              flexWrap: 'wrap',
-            }}
-          >
-            <button
-              type="button"
-              style={{
-                padding: '8px 12px',
-                borderRadius: 9999,
-                border: '1px solid rgba(17,24,39,0.08)',
-                background: '#ffffff',
-                color: '#111827',
-                boxShadow: 'var(--shadow-sm)',
-                cursor: 'default',
-              }}
-              aria-disabled="true"
-              title="Filters coming soon"
-            >
-              Popular
-            </button>
-            <button
-              type="button"
-              style={{
-                padding: '8px 12px',
-                borderRadius: 9999,
-                border: '1px solid rgba(17,24,39,0.08)',
-                background: '#ffffff',
-                color: '#111827',
-                boxShadow: 'var(--shadow-sm)',
-                cursor: 'default',
-              }}
-              aria-disabled="true"
-              title="Filters coming soon"
-            >
-              Newest
-            </button>
-            <button
-              type="button"
-              style={{
-                padding: '8px 12px',
-                borderRadius: 9999,
-                border: '1px solid rgba(17,24,39,0.08)',
-                background: '#ffffff',
-                color: '#111827',
-                boxShadow: 'var(--shadow-sm)',
-                cursor: 'default',
-              }}
-              aria-disabled="true"
-              title="Filters coming soon"
-            >
-              Quick Meals
-            </button>
+
+          <div style={{ marginTop: 16 }}>
+            <SearchBar />
+          </div>
+
+          <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+            <FilterTabs value={tab} onChange={setTab} />
           </div>
         </div>
       </section>
@@ -118,33 +71,20 @@ export default function Home() {
       {/* Grid */}
       <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
         {loading ? (
-          <div style={{ color: '#475569' }}>Loading...</div>
+          <div style={{ display: 'grid', gap: 24 }} className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl">
+            {new Array(8).fill(0).map((_, i) => (
+              <div key={i} className="card" style={{ borderRadius: 16, overflow: 'hidden' }}>
+                <div className="skeleton" style={{ width: '100%', height: 200 }} />
+                <div style={{ padding: 16, display: 'grid', gap: 8 }}>
+                  <div className="skeleton" style={{ width: '70%', height: 16 }} />
+                  <div className="skeleton" style={{ width: '50%', height: 12 }} />
+                  <div className="skeleton" style={{ width: '90%', height: 12 }} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
-          <div
-            role="list"
-            style={{
-              display: 'grid',
-              gridTemplateColumns:
-                'repeat(1, minmax(0, 1fr))',
-              gap: 24,
-            }}
-          >
-            {/* Responsive breakpoints via inline media queries */}
-            <style>
-              {`
-                @media (min-width: 768px) {
-                  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-                }
-                @media (min-width: 1024px) {
-                  .home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-                }
-                @media (min-width: 1280px) {
-                  .home-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-                }
-              `}
-            </style>
-            <div className="home-grid" style={{ display: 'contents' }} />
-            {/* Render grid via RecipeGrid to preserve mapping and animations */}
+          <div className="grid-1col grid-2col-md grid-3col-lg grid-4col-xl">
             <RecipeGrid recipes={recipes} />
           </div>
         )}
