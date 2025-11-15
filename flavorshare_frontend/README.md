@@ -54,8 +54,15 @@ If REACT_APP_SUPABASE_URL or REACT_APP_SUPABASE_KEY are missing at runtime, the 
 - Accessible, responsive UI
 
 ## Current limitations and extension tips
-- Tag filter UI (Home sidebar) is present but not yet wired to back-end filtering. To implement:
-  - Create a Postgres view or extend recipesApi.list to join recipe_tags and filter when a tagId is selected.
+- Tag filter UI (Home sidebar) now attempts to load tags from Supabase and falls back to a default set if none are found:
+  - Fallback list (client-side only): Breakfast, Lunch, Dinner, Vegan, Dessert, Quick Meals, Healthy, Kids Special.
+  - It tries tagsApi.listAll() first; if zero tags are returned or an error occurs, the fallback list is shown so users can filter immediately.
+  - Optional seeding helper (for admins/developers):
+    - In src/components/SidebarFilters.js set ENABLE_ADMIN_SEED = true temporarily.
+    - Log in (so RLS allows inserts), then click "Seed default tags to Supabase" in the Filters card.
+    - After seeding, the dropdown will use the real Supabase tags. Disable the flag again after seeding.
+  - Server-side tag filtering:
+    - recipesApi.list supports a tagId using a join to recipe_tags where RLS/schema allows it, and falls back to a client-side filter if the join is not permitted.
 - Avatar upload UI is not exposed in Settings yet. The storage helper uploadAvatar(file, userId) is available; you can add a file input in Settings and update profiles.avatar_url with the returned publicUrl.
 
 ## End-to-end validation checklist

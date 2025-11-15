@@ -27,6 +27,11 @@ Use the helper SQL file to provision tables, RLS policies, and storage buckets r
 
 3) Minimal seed data
 - The schema file includes optional tag seeds (Vegan, Vegetarian, Quick, Dessert, Gluten-free).
+- Frontend fallback tags: If your tags table is empty, the UI shows a default set (Breakfast, Lunch, Dinner, Vegan, Dessert, Quick Meals, Healthy, Kids Special) so users can filter client-side immediately.
+- Optional: You can seed these defaults into Supabase from the UI:
+  - In flavorshare_frontend/src/components/SidebarFilters.js set ENABLE_ADMIN_SEED = true.
+  - Start the app, log in, and press “Seed default tags to Supabase” in the Filters card.
+  - Turn the flag off afterwards.
 - You can insert demo profile/recipe by replacing UUIDs with a real auth.users.id and uncommenting example inserts.
 
 4) Storage behavior
