@@ -68,24 +68,13 @@ export default function Home() {
       {/* Listing */}
       <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
         {loading ? (
-          // Loading skeletons: grid placeholders to match final 1/2/3 layout
+          // Loading skeletons: grid placeholders to match fixed 1/2/3 layout
           <div
             role="list"
             aria-label="Loading recipes"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
-              gap: 24,
-            }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-6"
+            style={{ display: 'grid', gap: 24 }}
           >
-            <style>{`
-              @media (min-width: 640px) {
-                div[aria-label="Loading recipes"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-              }
-              @media (min-width: 1024px) {
-                div[aria-label="Loading recipes"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-              }
-            `}</style>
             {new Array(6).fill(0).map((_, i) => (
               <div
                 key={i}
@@ -112,8 +101,8 @@ export default function Home() {
             <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ margin: 0, fontSize: 18 }}>Trending recipes</h2>
             </header>
-            {/* Default to grid with 1/2/3 responsive columns */}
-            <RecipeGrid recipes={recipes} layout="grid" />
+            {/* Fixed 1/2/3 responsive columns on desktop widths */}
+            <RecipeGrid recipes={recipes} />
           </section>
         )}
       </div>
