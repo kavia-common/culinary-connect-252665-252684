@@ -19,7 +19,7 @@ export default function Profile() {
   }, [id]);
 
   return (
-    <div className="container no-overflow-x" style={{ paddingTop: 24, overflowX: 'hidden' }}>
+    <div className="container" style={{ paddingTop: 24 }}>
       <div className="card" style={{ padding: 16 }}>
         <h1 style={{ marginTop: 0 }}>{profile?.username || 'User'}</h1>
         <div style={{ color: 'var(--color-muted)' }}>{profile?.bio || 'No bio yet.'}</div>

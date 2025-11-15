@@ -14,22 +14,6 @@ code {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease both;
 }
-/* Also support .fade-in alias used by cards */
-.fade-in {
-  animation: fadeIn 0.5s ease both;
-}
-
-/* Skeleton shimmer */
-@keyframes pulseShimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
-  background-size: 400% 100%;
-  animation: pulseShimmer 1.4s ease infinite;
-  border-radius: 12px;
-}
 
 /* Utility helpers to emulate Tailwind style transitions (used inline via className) */
 .transition-all { transition-property: all; }
@@ -40,26 +24,3 @@ code {
 .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-from), var(--tw-gradient-to)); }
 .from-blue-50 { --tw-gradient-from: #eff6ff; }
 .to-white { --tw-gradient-to: #ffffff; }
-
-/* Brand gradients */
-.brand-gradient {
-  background: linear-gradient(135deg, #FF6B35, #FF3D00);
-}
-.primary-gradient {
-  background: linear-gradient(135deg, rgba(37,99,235,1), rgba(29,78,216,1));
-}
-
-/* Responsive grid helpers */
-.grid-1col { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 24px; }
-@media (min-width: 768px) { .grid-2col-md { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1024px) { .grid-3col-lg { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 1280px) { .grid-4col-xl { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-
-/* Safety utilities to enforce grid and prevent horizontal overflow */
-.force-grid { display: grid !important; }
-.block-full { display: block !important; width: 100% !important; }
-.no-overflow-x { overflow-x: hidden !important; }
-.normal-whitespace { white-space: normal !important; }
-
-/* Image safety: never overflow container width */
-.img-fluid { max-width: 100%; height: auto; display: block; }

@@ -4,11 +4,6 @@ A responsive React application for discovering and sharing recipes, themed with 
 
 ## Quick start
 
-> UI note: The redesigned Header and RecipeCard use lucide-react icons.
-> Install before running locally:
->
->   npm install lucide-react
-
 1. Install dependencies
    - npm install
 
