@@ -14,6 +14,10 @@ code {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease both;
 }
+/* Also support .fade-in alias used by cards */
+.fade-in {
+  animation: fadeIn 0.5s ease both;
+}
 
 /* Utility helpers to emulate Tailwind style transitions (used inline via className) */
 .transition-all { transition-property: all; }

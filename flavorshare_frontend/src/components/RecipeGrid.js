@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecipeCard } from './RecipeCard';
+import RecipeCard from './recipe/RecipeCard.jsx';
 
 /**
  * PUBLIC_INTERFACE

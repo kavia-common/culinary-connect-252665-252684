@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link, NavLink, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button } from './ui/Button';
-import { useAuth } from '../context/AuthContext';
-import { useDebounce } from '../hooks/useDebounce';
+// Requires: npm install lucide-react
+import { Search, Plus, UserCircle2, LogOut, LogIn, UserPlus, Settings as SettingsIcon, Home as HomeIcon } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { useDebounce } from '../../hooks/useDebounce';
 
 /**
  * PUBLIC_INTERFACE
- * Header
- * Top navigation with search.
+ * Header (Redesigned)
+ * A sticky, translucent gradient navbar with pill search and action buttons.
  */
-import Header from './ui/Header.jsx';
-export function Header() {
-  /** App header with search and auth actions. */
+export default function Header() {
+  /** Header with responsive search and auth actions wired to existing navigation */
   const { user, logout } = useAuth() || {};
   const [params, setParams] = useSearchParams();
   const [q, setQ] = React.useState(params.get('q') || '');
@@ -23,47 +23,34 @@ export function Header() {
     if (debounced) next.set('q', debounced);
     else next.delete('q');
     setParams(next, { replace: true });
-  }, [debounced]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounced]);
 
   return (
     <header
       role="banner"
-      className="bg-gradient-to-b from-blue-50 to-white"
+      className="sticky top-0 z-50 animate-fadeIn"
       style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
+        background: 'linear-gradient(180deg, rgba(37,99,235,0.06), rgba(255,255,255,0.9))',
+        backdropFilter: 'saturate(160%) blur(8px)',
         borderBottom: '1px solid rgba(17,24,39,0.06)',
       }}
     >
-      <div
-        className="container"
-        style={{
-          padding: '14px 0',
-        }}
-      >
+      <div className="container" style={{ padding: '12px 0' }}>
         <div
-          className="animate-fadeIn"
+          className="transition-all duration-300 ease-out"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            background: 'rgba(255,255,255,0.75)',
-            backdropFilter: 'saturate(180%) blur(8px)',
-            border: '1px solid rgba(17,24,39,0.06)',
-            borderRadius: 16, // rounded-2xl
-            padding: 12,
-            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
           }}
         >
           <Link
-            className="brand"
             to="/"
             aria-label="FlavorShare Home"
             style={{ display: 'flex', alignItems: 'center', gap: 10 }}
           >
             <span
-              className="brand-badge"
               aria-hidden="true"
               style={{
                 display: 'inline-flex',
@@ -73,16 +60,15 @@ export function Header() {
                 height: 40,
                 borderRadius: 12,
                 background:
-                  'linear-gradient(135deg, rgba(37,99,235,.12), rgba(249,250,251,1))',
+                  'linear-gradient(135deg, rgba(37,99,235,.14), rgba(249,250,251,1))',
                 border: '1px solid rgba(37,99,235,0.25)',
                 color: 'var(--color-primary)',
-                fontSize: 20,
+                boxShadow: 'var(--shadow-sm)',
               }}
             >
-              🥘
+              <HomeIcon size={20} />
             </span>
             <span
-              className="brand-title"
               style={{
                 fontWeight: 800,
                 fontSize: 18,
@@ -105,14 +91,13 @@ export function Header() {
               gap: 10,
               background: '#f3f4f6',
               border: '1px solid rgba(17,24,39,0.08)',
-              borderRadius: 9999, // rounded-full
+              borderRadius: 9999,
               padding: '8px 12px',
               boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+              marginLeft: 8,
             }}
           >
-            <span aria-hidden="true" style={{ color: '#64748b' }}>
-              🔎
-            </span>
+            <Search size={18} color="#64748b" aria-hidden />
             <input
               aria-label="Search recipes"
               placeholder="Search recipes..."
@@ -137,15 +122,20 @@ export function Header() {
               className="transition-colors duration-300 ease-out focus-visible:outline-none"
               style={{
                 border: '1px solid rgba(37,99,235,0.2)',
-                background: '#2563EB',
+                background:
+                  'linear-gradient(135deg, rgba(37,99,235,1), rgba(29,78,216,1))',
                 color: '#fff',
                 padding: '8px 14px',
                 borderRadius: 9999,
                 boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
               }}
-              onMouseOver={(e) => (e.currentTarget.style.background = '#1e40af')}
-              onMouseOut={(e) => (e.currentTarget.style.background = '#2563EB')}
+              onMouseOver={(e) => (e.currentTarget.style.opacity = '0.95')}
+              onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
             >
+              <Search size={16} />
               Search
             </button>
           </div>
@@ -166,26 +156,35 @@ export function Header() {
               className="transition-colors duration-200"
               style={({ isActive }) => ({
                 padding: '8px 12px',
-                borderRadius: 10,
+                borderRadius: 12,
                 color: isActive ? '#2563EB' : '#475569',
                 background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
-                transition: 'color .2s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
               })}
             >
+              <HomeIcon size={16} />
               Home
             </NavLink>
+
             <NavLink
               to="/recipes/new"
               className="transition-colors duration-200"
               style={({ isActive }) => ({
                 padding: '8px 12px',
-                borderRadius: 10,
+                borderRadius: 12,
                 color: isActive ? '#2563EB' : '#475569',
                 background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
               })}
             >
+              <Plus size={16} />
               Create
             </NavLink>
+
             {user ? (
               <>
                 <NavLink
@@ -193,11 +192,15 @@ export function Header() {
                   className="transition-colors duration-200"
                   style={({ isActive }) => ({
                     padding: '8px 12px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     color: isActive ? '#2563EB' : '#475569',
                     background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
                   })}
                 >
+                  <UserCircle2 size={16} />
                   Profile
                 </NavLink>
                 <NavLink
@@ -205,21 +208,37 @@ export function Header() {
                   className="transition-colors duration-200"
                   style={({ isActive }) => ({
                     padding: '8px 12px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     color: isActive ? '#2563EB' : '#475569',
                     background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
                   })}
                 >
+                  <SettingsIcon size={16} />
                   Settings
                 </NavLink>
-                <Button
-                  variant="ghost"
+                <button
+                  type="button"
                   onClick={logout}
                   className="transition-all duration-300 ease-out"
                   aria-label="Logout"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    padding: '8px 12px',
+                    borderRadius: 12,
+                    border: '1px solid rgba(17,24,39,0.08)',
+                    background: 'transparent',
+                    color: '#111827',
+                    cursor: 'pointer',
+                  }}
                 >
+                  <LogOut size={16} />
                   Logout
-                </Button>
+                </button>
               </>
             ) : (
               <>
@@ -228,11 +247,15 @@ export function Header() {
                   className="transition-colors duration-200"
                   style={({ isActive }) => ({
                     padding: '8px 12px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     color: isActive ? '#2563EB' : '#475569',
                     background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
                   })}
                 >
+                  <LogIn size={16} />
                   Login
                 </NavLink>
                 <NavLink
@@ -240,11 +263,15 @@ export function Header() {
                   className="transition-colors duration-200"
                   style={({ isActive }) => ({
                     padding: '8px 12px',
-                    borderRadius: 10,
+                    borderRadius: 12,
                     color: isActive ? '#2563EB' : '#475569',
                     background: isActive ? 'rgba(37,99,235,0.08)' : 'transparent',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
                   })}
                 >
+                  <UserPlus size={16} />
                   Register
                 </NavLink>
               </>
