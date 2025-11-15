@@ -24,7 +24,7 @@ export function RecipeGrid({ recipes }) {
     <div
       role="list"
       aria-label="Recipe list"
-      className="animate-fadeIn grid grid-cols-1 md:grid-cols-3 gap-8"
+      className="animate-fadeIn force-grid grid grid-cols-1 md:grid-cols-3 gap-8 block-full no-overflow-x normal-whitespace"
       style={{
         display: 'grid',
         gap: 32,

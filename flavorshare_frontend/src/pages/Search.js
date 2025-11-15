@@ -33,7 +33,7 @@ export default function Search() {
   }, [debounced, setSearch]);
 
   return (
-    <div className="container" style={{ paddingTop: 24, overflowX: 'hidden' }}>
+    <div className="container no-overflow-x" style={{ paddingTop: 24, overflowX: 'hidden' }}>
       <h1>Search</h1>
       <div style={{ color: 'var(--color-muted)', marginBottom: 12 }}>
         Results for: <strong>{debounced}</strong>

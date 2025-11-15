@@ -12,7 +12,7 @@ export default function Layout({ children }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#FAFAFA', overflowX: 'hidden' }}>
       <Header />
-      <main style={{ flex: '1 1 auto' }}>
+      <main className="block-full no-overflow-x" style={{ flex: '1 1 auto', overflowX: 'hidden' }}>
         {children}
       </main>
       <Footer />

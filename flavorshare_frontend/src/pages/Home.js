@@ -36,7 +36,7 @@ export default function Home() {
   }, [tab]);
 
   return (
-    <div style={{ background: '#fafafa', minHeight: 'calc(100vh - 64px)' }}>
+    <div className="block-full" style={{ background: '#fafafa', minHeight: 'calc(100vh - 64px)' }}>
       {/* Hero */}
       <section
         className="animate-fadeIn"
@@ -66,13 +66,13 @@ export default function Home() {
       </section>
 
       {/* Listing */}
-      <div className="container" style={{ paddingTop: 20, paddingBottom: 40 }}>
+      <div className="container no-overflow-x" style={{ paddingTop: 20, paddingBottom: 40, overflowX: 'hidden' }}>
         {loading ? (
           // Loading skeletons: grid placeholders to match fixed 1/2/3 layout
           <div
             role="list"
             aria-label="Loading recipes"
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="force-grid grid grid-cols-1 md:grid-cols-3 gap-8 block-full normal-whitespace"
             style={{ display: 'grid', gap: 32, overflowX: 'hidden', whiteSpace: 'normal' }}
           >
             {new Array(6).fill(0).map((_, i) => (
@@ -95,7 +95,7 @@ export default function Home() {
           <section
             role="region"
             aria-label="Recipes"
-            className="animate-fadeIn"
+            className="animate-fadeIn block-full"
             style={{ display: 'grid', gap: 16 }}
           >
             <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

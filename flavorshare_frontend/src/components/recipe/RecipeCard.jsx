@@ -86,7 +86,7 @@ export default function RecipeCard({ recipe }) {
           <img
             src={img}
             alt={recipe?.title ? `${recipe.title} cover` : 'Recipe image'}
-            className="transition-transform duration-500"
+            className="transition-transform duration-500 img-fluid"
             style={{
               width: '100%',
               height: 200, // maintain consistent image height across cards
