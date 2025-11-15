@@ -52,6 +52,7 @@ export default function RecipeCreate() {
         // API create will serialize ingredients/steps appropriately
         ingredients: ingredients,
         steps: steps,
+        // pass through; API will also enforce/derive current user id
         author_id: user.id,
         created_at: new Date().toISOString()
       };

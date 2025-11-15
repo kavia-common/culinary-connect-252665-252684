@@ -35,6 +35,7 @@ export default function RecipeDetail() {
   if (!recipe) return <div className="container" style={{ paddingTop: 24 }}>Loading...</div>;
 
   const isOwner = user?.id && recipe?.author_id && user.id === recipe.author_id;
+  const authorLabel = recipe?.author?.display_name || recipe?.author?.username || recipe?.author_username || recipe?.author_id || 'Unknown';
 
   return (
     <div className="container" style={{ paddingTop: 24, maxWidth: 900 }}>
@@ -43,7 +44,7 @@ export default function RecipeDetail() {
         <div style={{ padding: 16 }}>
           <h1 style={{ marginTop: 0 }}>{recipe.title}</h1>
           <div style={{ color: 'var(--color-muted)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <span>Author: {recipe.author_username || recipe.author_id}</span>
+            <span>Author: {authorLabel}</span>
             <span>Servings: {recipe.servings || '-'}</span>
             <span>Cook time: {recipe.cook_time || '-'}m</span>
           </div>
